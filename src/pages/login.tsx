@@ -1,28 +1,37 @@
-import { useForm } from "react-hook-form";
+import { FormProvider, useForm } from "react-hook-form";
 import loginSchema, { loginData } from "../schemas/loginSchema";
-import InputZod from "../components/inputZod";
 import { zodResolver } from "@hookform/resolvers/zod";
-
+import useLogin from "../hooks/useLogin";
+import Input from "../components/input";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
+  const methods = useForm<loginData>({ resolver: zodResolver(loginSchema) });
+  const navigate = useNavigate();
   const {
-    handleSubmit,
     formState: { errors },
-  } = useForm<loginData>({ resolver: zodResolver(loginSchema) });
+    handleSubmit,
+  } = methods;
 
+  const { login } = useLogin();
   const submitForm = async (data: loginData) => {
     try {
-      console.log(data);
-    } catch (error) {}
+      await login(data);
+      navigate("/home");
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
-    <div>
-      <InputZod type="email" schema={loginSchema} value="email" />
-      {errors.email && <span>{errors.email.message}</span>}
-      <InputZod type="password" schema={loginSchema} value="password" />
-      {errors.password && <span>{errors.password.message}</span>}
-      <button onClick={handleSubmit(submitForm)}>Submit</button>
-    </div>
+    <FormProvider {...methods}>
+      <div>
+        <Input name="email" type="email" />
+        {errors.email && <span>{errors.email.message}</span>}
+        <Input name="password" type="password" />
+        {errors.password && <span>{errors.password.message}</span>}
+        <button onClick={handleSubmit(submitForm)}>Submit</button>
+      </div>
+    </FormProvider>
   );
 }
 
