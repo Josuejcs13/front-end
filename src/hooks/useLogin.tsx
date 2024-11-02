@@ -8,8 +8,12 @@ const useLogin = () => {
   const { setUser } = useContext(UserContext);
   const login = async (data: loginData) => {
     const loginUrl = `${BASE_URL}/login`;
+   
+    
     const response = await axios.post(loginUrl, data);
     setUser(response.data);
+    
+    
     localStorage.setItem("user", JSON.stringify(response.data));
   };
   return {
