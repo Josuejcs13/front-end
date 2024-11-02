@@ -13,6 +13,7 @@ function UserProvider({ children }: UserProviderProps) {
     email: "",
     token: "",
   });
+  
   const inicialState = {
     user,
     setUser,
