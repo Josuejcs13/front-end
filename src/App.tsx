@@ -1,13 +1,19 @@
 import { RouterProvider } from "react-router-dom";
-import "./App.css";
 import router from "./routes/router";
 import UserProvider from "./contexts/userProvider";
+import FavoritesProvider from "./contexts/favoritesProvider";
+
+import RecipesProvider from "./contexts/recipesProvider";
 
 function App() {
   return (
-    <UserProvider>
-      <RouterProvider router={router} />
-    </UserProvider>
+    <RecipesProvider>
+      <FavoritesProvider>
+        <UserProvider>
+          <RouterProvider router={router} />
+        </UserProvider>
+      </FavoritesProvider>
+    </RecipesProvider>
   );
 }
 
